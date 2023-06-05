@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      'use strict';
+      // const obj = {
+      //   prop: 44
+      // };
+      // Object.freeze(obj);
+      // obj.prop = 33;
+      // // Throws an error in strict mode 'use strict';
+      // console.log(obj.prop);
+      // // Expected output: 42
+
+      // var obj = {
+      //   prop: function () {},
+      //   foo: 'bar'
+      // };
+
+      // 新的属性会被添加，已存在的属性可能
+      // 会被修改或移除
+      // obj.foo = 'baz';
+      // obj.lumpy = 'woof';
+      // delete obj.prop;
+      // console.log('obj', obj);
+      // // {foo: 'baz', lumpy: 'woof'}
+
+      // 作为参数传递的对象与返回的对象都被冻结
+      // 所以不必保存返回的对象（因为两个对象全等）
+      // var o = Object.freeze(obj);
+      // console.log('o', o);
+
+      // console.log('o === obj:', o === obj); // true
+      // console.log('Object.isFrozen(obj):', Object.isFrozen(obj)); // === true
+      // console.log('Object.isFrozen(o):', Object.isFrozen(o)); // === true
+
+      // // 现在任何改变都会失效
+      // obj.foo = 'quux'; // 静默地不做任何事 cannot assign to read only property 'foo' of object '#<Object>'
+      // // 静默地不添加此属性
+      // obj.quaxxor = 'the friendly duck'; //cannot assign to read only property 'foo' of object '#<Object>'
+
+      // 在严格模式，如此行为将抛出 TypeErrors
+      // function fail() {
+      //   'use strict';
+      //   // obj.foo = 'sparky'; // throws a TypeError:Uncaught TypeError: Cannot assign to read only property 'foo' of object '#<Object>'
+      //   // delete obj.quaxxor; // 返回 true，因为 quaxxor 属性从来未被添加
+      //   // delete obj.foo; // cannot delete property 'foo' of #<Object>
+      //   // obj.sparky = 'arf'; // throws a TypeError: Cannot add property sparky, object is not extensible
+      // }
+
+      // fail();
+
+      // console.log('obj 1:', obj);//{foo: 'baz', lumpy: 'woof'}
+      // 试图通过 Object.defineProperty 更改属性
+      // 下面两个语句都会抛出 TypeError.
+      // Object.defineProperty(obj, 'ohai', { value: 17 });//Cannot define property ohai, object is not extensible
+      // Object.defineProperty(obj, 'foo', { value: 'eit' }); //Cannot redefine property: foo
+
+      // 也不能更改原型
+      // 下面两个语句都会抛出 TypeError.
+      // Object.setPrototypeOf(obj, { x: 20 }); //#<Object> is not extensible
+      // obj.__proto__ = { x: 20 };//#<Object> is not extensible
+
+      // let a = [0];
+      // Object.freeze(a); // 现在数组不能被修改了。
+      // console.dir(a);
+      // // a[0] = 1; // fails silently
+      // // a.push(2); // fails silently: Cannot add property 1, object is not extensible
+
+      // // In strict mode such attempts will throw TypeErrors
+      // console.dir(a);
+      // (function () {
+      //   'use strict';
+      //   // a[0] = 1; // unstrict mode fails silently | strict mode throw TypeErrors
+      //   // a.push(2); //Cannot add property 1, object is not extensible
+      // })();
+      // console.dir(a);
+
+      // let obj1 = {
+      //   internal: {}
+      // };
+      // Object.freeze(obj1);
+      // obj1.internal.a = 'aValue';
+      // // obj1.internal = { a: 1 }; //Uncaught TypeError: Cannot assign to read only property 'internal' of object '#<Object>'
+      // console.log('obj1', obj1);
+
+      // 深冻结函数。
+      // function deepFreeze(obj) {
+      //   // 取回定义在 obj 上的属性名
+      //   var propNames = Object.getOwnPropertyNames(obj);
+
+      //   // 在冻结自身之前冻结属性
+      //   propNames.forEach(function (name) {
+      //     var prop = obj[name];
+
+      //     // 如果 prop 是个对象，冻结它
+      //     if (typeof prop == 'object' && prop !== null) deepFreeze(prop);
+      //   });
+
+      //   // 冻结自身 (no-op if already frozen)
+      //   return Object.freeze(obj);
+      // }
+
+      // let obj2 = {
+      //   internal: {}
+      // };
+
+      // deepFreeze(obj2);
+      // obj2.internal.a = 'anotherValue'; //Uncaught TypeError: Cannot add property a, object is not extensible
+      // console.log('obj2.internal.a:', obj2.internal.a); // undefined
+
+      const res = Object.freeze(1); //TypeError: 1 is not an object // ES5 code
+      console.log('res', res);
+      const res1 = Object.freeze(1); // ES2015 code
+      console.log('res1', res1);
+    </script>
+  </body>
+</html>

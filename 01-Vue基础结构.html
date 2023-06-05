@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Vue 基础结构</title>
+  </head>
+  <body>
+    <div id="app">
+      <h3>差值表达式:</h3>
+      <div>{{ msg }}</div>
+      <div>{{ count }}</div>
+      <hr>
+      <h3>v-text:</h3>
+      <div v-text="msg"></div>
+      <hr>
+      <h3>v-model:</h3>
+      <input type="text" v-model="msg" />
+      <input type="text" v-model="count" />
+    </div>
+
+    <script src="./js/vue.js"></script>
+    <script>
+      // let vm = new Vue({
+      //   el: '#app',
+      //   data: {
+      //     msg: 'Hello Vue',
+      //     count: 20,
+      //     items: ['a', 'b', 'c']
+      //   }
+      // })
+      let vm = new Vue({
+        data() {
+          return {
+            msg: 'Hello Vue',
+            count: 20,
+            items: ['a', 'b', 'c']
+          };
+        }
+      }).$mount('#app');
+    </script>
+  </body>
+</html>

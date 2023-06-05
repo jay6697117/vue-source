@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="cn">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>发布订阅模式</title>
+  </head>
+  <body>
+    <script>
+      // 事件触发器
+      class EventEmitter {
+        constructor() {
+          // { 'event1': [fn1], 'event2': [fn1,fn2] }
+          // this.subs = Object.create(null); //也可以是空对象{}
+          // this.subs = {};
+          // console.log('constructor this.subs:', this.subs); //对象
+        }
+
+        subs = {};
+
+        // 订阅事件
+        $on(eventType, handler) {
+          // this.subs[eventType] = this.subs[eventType] || [];
+          if (!this.subs[eventType]) {
+            this.subs[eventType] = []; //默认数组
+          }
+          // console.log('$on handler :', handler);
+          this.subs[eventType].push(handler);
+          // console.log('$on this.subs[eventType]:', this.subs[eventType]);
+        }
+
+        // 发布事件
+        $emit(eventType) {
+          // console.log('this.subs', this.subs);
+          //只要不是undefined,就说明this.subs[eventType]是数组
+          if (this.subs[eventType]) {
+            this.subs[eventType].forEach(handler => {
+              // console.log('handler 0:', handler);
+              handler();
+            });
+          }
+        }
+      }
+
+      // 测试
+      let em = new EventEmitter();
+      // console.log('EventEmitter.prototype:', EventEmitter.prototype);
+      console.log('em:', em);
+      console.log('-------------------------')
+      em.$on('click1', () => {
+        console.log('click1 运行了 ...');
+      });
+      em.$on('click2', () => {
+        console.log('click2 运行了 ...');
+      });
+      em.$emit('click1');
+      em.$emit('click2');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "remote-git-tags": "^4.0.0"
+  }
+}

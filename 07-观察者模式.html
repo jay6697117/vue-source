@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>观察者模式</title>
+  </head>
+  <body>
+    <script>
+      // 发布订阅模式
+      class Dep {
+        constructor() {
+          // 记录所有的订阅
+          this.subs = [];
+        }
+        // 添加订阅
+        addSub(sub) {
+          //sub为真并且有update方法
+          if (sub && sub.update) {
+            console.log('addSub sub:', sub);
+            this.subs.push(sub);
+          }
+        }
+        // 发布订阅
+        notify() {
+          console.log('notify this.subs:', this.subs);
+          this.subs.forEach((sub, index) => {
+            // console.log('sub:', sub)
+            sub.update(Date.now() + '-' + index);
+          });
+        }
+      }
+      // 观察者
+      class Watcher {
+        update(time) {
+          console.log('Watcher update:', time);
+        }
+      }
+
+      // 测试
+      let dep = new Dep();
+      let watcher = new Watcher();
+
+      dep.addSub(watcher);
+      dep.addSub(watcher);
+      dep.addSub(watcher);
+      console.log('dep:', dep);
+      dep.notify();
+    </script>
+  </body>
+</html>
