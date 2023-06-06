@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1 style="font-size: 100px" id="demo">loading....</h1>
+    <script>
+      let timer = null;
+      const imageSrc = 'https://www.themealdb.com/images/ingredients/Lime.png';
+
+      function loadImage(src, callback) {
+        const image = document.createElement('img');
+        image.src = src;
+        image.alt = '公众号若川视野专用图？';
+        image.style = 'width: 200px;height: 200px';
+        image.onload = () => callback(null, image); // err === null image === image
+        image.onerror = () => callback(new Error('加载失败')); // err === new Error('加载失败666') image === undefined
+      }
+
+      function promisify(originalFn) {
+        function fn(...args) {
+          return new Promise((resolve, reject) => {
+            args.push((err, ...values) => {
+              if (err) {
+                return reject(err);
+              }
+              resolve(values);
+            });
+            // originalFn.apply(this, args);
+            Reflect.apply(originalFn, this, args);
+          });
+        }
+        return fn;
+      }
+
+      const loadImagePromise = promisify(loadImage);
+
+      async function load() {
+        try {
+          const res = await loadImagePromise(imageSrc);
+          console.log(res);
+        } catch (err) {
+          console.log(err);
+        }
+      }
+      load();
+
+      // old model ***start***
+      // function loadImagePromise(imageSrc) {
+      //   return new Promise((resolve, reject) => {
+      //     loadImage(imageSrc, function (err, content) {
+      //       if (err) {
+      //         timer = setTimeout(() => {
+      //           return reject(err);
+      //         }, 3000);
+      //       }
+      //       timer = setTimeout(() => {
+      //         return resolve(content);
+      //       }, 3000);
+      //     });
+      //   });
+      // }
+      // document.getElementById('demo').style.display = 'block';
+      // loadImagePromise(imageSrc)
+      //   .then(res => {
+      //     console.log('res', res);
+      //     document.body.append(res);
+      //   })
+      //   .catch(err => {
+      //     console.log('err', err);
+      //   })
+      //   .finally(() => {
+      //     timer && clearTimeout(timer);
+      //     timer = null;
+      //     document.getElementById('demo').style.display = 'none';
+      //   });
+      // old model ***end***
+    </script>
+  </body>
+</html>

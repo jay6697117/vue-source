@@ -6,6 +6,8 @@
 // const ccc = 123;
 // console.log(ccc?.toString());
 
+
+/*
 // 引入remoteGitTags函数
 // import remoteGitTags from 'remote-git-tags';
 // console.log('remoteGitTags', remoteGitTags)
@@ -54,3 +56,4 @@ fs.writeFile(`myMap-${Date.now()}.json`, jsonString, err => {
   if (err) throw err;
   console.log('Map saved to file!');
 });
+ */
