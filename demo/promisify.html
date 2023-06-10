@@ -25,24 +25,25 @@
 
       function promisify(originalFn) {
         console.log('originalFn:', originalFn); // loadImage 函数
-        return function fn(...args) {
+        return (...args) => {
           console.log('args 1:', args);
           return new Promise((resolve, reject) => {
-            args.push((err, ...values) => {
-              if (err) {
-                return reject(err);
-              }
-              console.log('values', values);
-              return resolve(values);
-            });
-            console.log('args 2:', args);
-
             timer = setTimeout(() => {
-              originalFn.apply(this, args);
+              args.push((err, ...values) => {
+                if (err) {
+                  return reject(err);
+                }
+                console.log('values', values);
+                return resolve(values);
+              });
+              console.log('args 2:', args);
+
+              originalFn.apply(null, args);
+              Reflect.apply(originalFn, null, args);
+
+              // originalFn.apply(this, args);
+              // Reflect.apply(originalFn, this, args);
             }, 3000);
-            // timer = setTimeout(() => {
-            //   Reflect.apply(originalFn, this, args);
-            // }, 3000);
           });
         };
       }
