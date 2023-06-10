@@ -38,7 +38,8 @@
               });
               console.log('args 2:', args);
 
-              originalFn.apply(null, args);
+              originalFn.call(null, ...args);
+              // originalFn.apply(null, args);
               Reflect.apply(originalFn, null, args);
 
               // originalFn.apply(this, args);
@@ -54,9 +55,9 @@
         try {
           document.getElementById('demo').style.display = 'block';
           const res = await loadImagePromise(imageSrc);
-          console.log('res', res);
+          console.log('load res:', res);
         } catch (err) {
-          console.log('err', err);
+          console.log('load err:', err);
         } finally {
           document.getElementById('demo').style.display = 'none';
           timer && clearTimeout(timer);

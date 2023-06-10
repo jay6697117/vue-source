@@ -40,15 +40,14 @@
       loadImagePromise(imageSrc)
         .then(res => {
           console.log('res', res);
-          document.body.append(res);
         })
         .catch(err => {
           console.log('err', err);
         })
         .finally(() => {
+          document.getElementById('demo').style.display = 'none';
           timer && clearTimeout(timer);
           timer = null;
-          document.getElementById('demo').style.display = 'none';
         });
     </script>
   </body>
