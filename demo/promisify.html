@@ -23,35 +23,46 @@
         document.body.append(image);
       }
 
-      // old model ***start***
-      function loadImagePromise(imageSrc) {
-        return new Promise((resolve, reject) => {
-          timer = setTimeout(() => {
-            loadImage(imageSrc, function (err, content) {
+      function promisify(originalFn) {
+        console.log('originalFn:', originalFn); // loadImage 函数
+        return function fn(...args) {
+          console.log('args 1:', args);
+          return new Promise((resolve, reject) => {
+            args.push((err, ...values) => {
               if (err) {
                 return reject(err);
               }
-              return resolve(content);
+              console.log('values', values);
+              return resolve(values);
             });
-          }, 3000);
-        });
+            console.log('args 2:', args);
+
+            timer = setTimeout(() => {
+              originalFn.apply(this, args);
+            }, 3000);
+            // timer = setTimeout(() => {
+            //   Reflect.apply(originalFn, this, args);
+            // }, 3000);
+          });
+        };
       }
 
-      document.getElementById('demo').style.display = 'block';
-      loadImagePromise(imageSrc)
-        .then(res => {
+      const loadImagePromise = promisify(loadImage);
+
+      async function load() {
+        try {
+          document.getElementById('demo').style.display = 'block';
+          const res = await loadImagePromise(imageSrc);
           console.log('res', res);
-          document.body.append(res);
-        })
-        .catch(err => {
+        } catch (err) {
           console.log('err', err);
-        })
-        .finally(() => {
+        } finally {
+          document.getElementById('demo').style.display = 'none';
           timer && clearTimeout(timer);
           timer = null;
-          document.getElementById('demo').style.display = 'none';
-        });
-      // old model ***end***
+        }
+      }
+      load();
     </script>
   </body>
 </html>
