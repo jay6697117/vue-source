@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="node"></div>
+    <div class="node1"></div>
+    <script>
+      // const dataObj = {};
+      // const dataMap = new Map();
+      // // element 为节点对象
+      // const element = document.querySelector('.node');
+      // console.log('element:', element); // 输出 div.node 对象
+
+      // dataObj['a b c'] = '666';
+      // dataObj[element] = 'objectData';
+      // dataMap.set(element, 'objectData1');
+      // console.log('dataObj', dataObj);
+      // console.log('dataMap', dataMap);
+      // console.log('dataMap.get(element):', dataMap.get(element))
+      // console.log("dataObj['a b c']:", dataObj['a b c']);
+      // for (const key in dataObj) {
+      //   console.log('key:', key, typeof key);
+      // }
+      // console.log('-------------');
+      // for (let [key, value] of dataMap) {
+      //   console.log(key, typeof key, ' -- ', value, typeof value);
+      // }
+      // console.log('-------------');
+
+      // // 1. 通过new Map来创建dataMap容器
+      // const dataMap = new Map();
+      // // 2. 获取节点对象，作为测试数据
+      // const element = document.querySelector('.node');
+      // const element1 = document.querySelector('.node1');
+      // // 3. 通过 set 方法给 dataMap 中指定键和对应的值
+      // dataMap.set(element, 'objectData-666');
+      // dataMap.set(element1, 'objectData-777');
+      // // 4. 通过 get 来从 dataMap 中获取键名对应的值
+      // console.log('dataMap.has(element', dataMap.has(element));
+      // console.log('dataMap.get(element)', dataMap.get(element));
+      // // 5. 揭开面目
+      // console.log('dataMap', dataMap,dataMap.size)
+
+      const dataMap = new Map();
+      const b = { b: 2 };
+      dataMap
+        .set('name', 'hahhaaha')
+        .set(123, 'dsdffd')
+        .set(true, 'falsefalse')
+        .set({ a: 1 }, 'aaaaaa')
+        .set(b, 'bbbbbb');
+      console.log('dataMap 0', dataMap);
+      console.log(dataMap.has({ a: 1 }));
+      console.log(dataMap.has(b));
+      console.log(dataMap.get({ a: 1 }));
+      console.log(dataMap.get(b));
+      // dataMap.delete(b)
+      dataMap.clear()
+      console.log('dataMap 1', dataMap);
+    </script>
+  </body>
+</html>
