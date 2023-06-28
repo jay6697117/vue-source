@@ -4,11 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      #demo,
+      #node {
+        width: 200px;
+        height: 200px;
+        background-color: red;
+        margin-bottom: 10px;
+      }
+    </style>
   </head>
   <body>
-    <div class="node"></div>
-    <div class="node1"></div>
+    <div style="display: none" id="demo"></div>
+    <div style="display: none" id="node"></div>
+    <h1 style="display: none; font-size: 80px" id="loading">loading......</h1>
     <script>
+      // 完结撒花🎉🎉🎉🎉🎉🎉
+      // 文章: https://juejin.cn/post/6993101968545677319
+
       // const dataObj = {};
       // const dataMap = new Map();
       // // element 为节点对象
@@ -45,22 +58,178 @@
       // // 5. 揭开面目
       // console.log('dataMap', dataMap,dataMap.size)
 
-      const dataMap = new Map();
-      const b = { b: 2 };
-      dataMap
-        .set('name', 'hahhaaha')
-        .set(123, 'dsdffd')
-        .set(true, 'falsefalse')
-        .set({ a: 1 }, 'aaaaaa')
-        .set(b, 'bbbbbb');
-      console.log('dataMap 0', dataMap);
-      console.log(dataMap.has({ a: 1 }));
-      console.log(dataMap.has(b));
-      console.log(dataMap.get({ a: 1 }));
-      console.log(dataMap.get(b));
+      // const dataMap = new Map();
+      // const b = { b: 2 };
+      // dataMap
+      //   .set('name', 'hahhaaha')
+      //   .set(123, 'dsdffd')
+      //   .set(true, 'falsefalse')
+      //   .set({ a: 1 }, 'aaaaaa')
+      //   .set(b, 'bbbbbb');
+      // console.log('dataMap 0', dataMap);
+      // console.log(dataMap.has({ a: 1 }));
+      // console.log(dataMap.has(b));
+      // console.log(dataMap.get({ a: 1 }));
+      // console.log(dataMap.get(b));
       // dataMap.delete(b)
-      dataMap.clear()
-      console.log('dataMap 1', dataMap);
+      // dataMap.clear()
+      // console.log('dataMap 1', dataMap);
+      // console.log(dataMap.keys());
+      // console.log(dataMap.values());
+      // console.log(dataMap.entries());
+      // dataMap.forEach((value, key) => {
+      //   console.log('element:', value, key);
+      // });
+
+      // for (const [key,value] of dataMap.entries()) {
+      //   console.log('key:',key,' -- ','value:',value);
+      // }
+      // const tempArr = [...dataMap]
+      // console.log('tempArr', tempArr)
+      // console.log('----------------------------------');
+      // for (const iterator of dataMap.keys()) {
+      //   console.log('iterator 1:', iterator)
+      // }
+      // console.log('----------------------------------');
+      // for (const iterator of dataMap.values()) {
+      //   console.log('iterator 2:', iterator)
+      // }
+      // console.log('----------------------------------');
+      // for (const [key, value] of dataMap.entries()) {
+      //   console.log('key:', key, ' -- ', 'value:', value);
+      // }
+      // console.log('----------------------------------');
+
+      // let arr = [
+      //   [0, 'a'],
+      //   [1, 'b'],
+      //   [2, 'c']
+      // ];
+      // let map = new Map(arr);
+      // let obj = {};
+      // console.log('map', map, map.size);
+      // for (const [key, value] of map) {
+      //   obj[key] = value;
+      // }
+      // console.log('obj', obj);
+
+      // const map1 = new Map();
+
+      // for (const key of Object.keys(obj)) {
+      //   map1.set(key, obj[key]);
+      // }
+      // console.log('map1', map1);
+      // console.log(JSON.stringify(map) === JSON.stringify(map1));
+      // const map = new WeakMap();
+      // map.set({ a: 1 }, 1);
+      // // map.set(null,1)
+      // // map.set('a',1)
+      // console.log('map', map);
+
+      // const e1 = document.getElementById('demo');
+      // const e2 = document.getElementById('node');
+      // const arr = [
+      //   [e1, 'demo元素'],
+      //   [e2, 'node元素']
+      // ];
+      // console.log('arr', arr)
+
+      // const myMap = new Map();
+      // let my = {
+      //   name: 'ljc1',
+      //   sex: '男1'
+      // };
+      // myMap.set(my, 'info1');
+      // console.log('myMap', myMap);
+
+      // const myWeakMap = new WeakMap();
+      // let myWeak = {
+      //   name: 'ljc2',
+      //   sex: '男2'
+      // };
+      // myWeakMap.set(myWeak, 'info2');
+      // console.log('myWeakMap', myWeakMap);
+      // // console.log('myWeakMap.entries()', myWeakMap.entries()); //myWeakMap.entries is not a function
+
+      // WeakMap 的使用场景
+
+      // const myWeakMap = new WeakMap();
+      // const demo = document.getElementById('demo');
+      // myWeakMap.set(demo, {disabled: true});
+      // console.log('myWeakMap', myWeakMap,myWeakMap.get(demo))
+
+      /*
+      //部署私有属性
+      // 利用弱映射，将内部属性设置为实例的弱引用对象，当实例删除时，私有属性也会随之消失，因此不会内存泄漏
+      const loadingNode =  document.getElementById('loading')
+      const demo = document.getElementById('demo');
+      const node = document.getElementById('node');
+      const _counter = new WeakMap();
+      const _action = new WeakMap();
+
+      class Countdown {
+        constructor(counter, action) {
+          _counter.set(this, counter);
+          _action.set(this, action);
+        }
+        dec() {
+          loadingNode.style.display = 'block'
+          let counter = _counter.get(this);
+          if (counter < 1) return;
+          counter--;
+          _counter.set(this, counter);
+          if (counter === 0) {
+            //完成执行action
+            setTimeout(() => {
+              _action.get(this)();
+            }, 3000)
+            // _action.get(this)();
+          }
+        }
+      }
+
+      const c = new Countdown(3, () => {
+        console.log('DONE')
+        loadingNode.style.display = 'none'
+        demo.style.display = 'block'
+        node.style.display = 'block'
+      });
+
+      console.log('_counter', _counter);
+      console.log('_action', _action);
+      console.log('------------------');
+      c.dec();
+      console.log('_counter', _counter);
+      console.log('_action', _action);
+      console.log('------------------');
+      c.dec();
+      console.log('_counter', _counter);
+      console.log('_action', _action);
+      console.log('------------------');
+      c.dec();
+      console.log('_counter', _counter);
+      console.log('_action', _action);
+      console.log('------------------');
+      // DONE
+      */
+
+      // 3. 数据缓存
+      const cache = new WeakMap();
+      function countOwnKeys(obj) {
+        console.log('cache:', cache)
+        if (cache.has(obj)) {
+          console.log('111');
+          return cache.get(obj);
+        } else {
+          console.log('222');
+          cache.set(obj, Object.keys(obj).length);
+          return cache.get(obj);
+        }
+      }
+      const tempObj = { a: 1, b: 2, c: 3 };
+      console.log(countOwnKeys(tempObj));//不走缓存
+      console.log('--------------');
+      console.log(countOwnKeys(tempObj));//这里走缓存
     </script>
   </body>
 </html>
