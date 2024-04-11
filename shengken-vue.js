@@ -105,7 +105,7 @@ var capitalize = cached(function (str) {
 });
 
 console.log(capitalize('abc')); */
-
+/*
 function cached(fn) {
   var cache = Object.create(null); // 创建一个空对象
   // 具名函数cachedFn
@@ -115,7 +115,7 @@ function cached(fn) {
     return hit || (cache[str] = fn(str));
   };
 }
-
+*/
 /* var hyphenateRE = /\B([A-Z])/g;
 var hyphenate = cached(function (str) {
   return str.replace(hyphenateRE, '-$1').toLowerCase();
