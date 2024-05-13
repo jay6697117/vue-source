@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div>
+      <div><input type="file" id="imageInput" /></div>
+      <hr />
+      <div><img src="" alt="" id="previewImage" /></div>
+    </div>
+
+    <script>
+      const previewImage = document.getElementById('previewImage');
+      const imageInput = document.getElementById('imageInput');
+
+      imageInput.addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file) {
+          const render = new FileReader(); // js中专门用于读取上传图像文件的
+          render.readAsArrayBuffer(file); // 将文件读成二进制流
+          render.onload = e => {
+            const imageData = e.target.result; // 二进制流
+
+            // 开一个新的线程
+            const worker = new Worker('worker.js');
+
+            createImageBitmap(new Blob([imageData])).then(imageBitmap => {
+              // 将buffer流转成真实的数组，且是异步方法
+              console.log('imageBitmap:', imageBitmap);
+              worker.postMessage({ imageBitmap }, [imageBitmap]); // 将目前的图片数据传给第二个线程
+              worker.onmessage = e => {
+                // 从第二个线程中获取数据
+                console.log('e 2:', e.data.processImageBitmap);
+                const processImageBitmap = e.data.processImageBitmap;
+                const previewCanvas = document.createElement('canvas');
+                previewCanvas.width = processImageBitmap.width;
+                previewCanvas.height = processImageBitmap.height;
+
+                const previewCtx = previewCanvas.getContext('2d');
+                previewCtx.drawImage(processImageBitmap, 0, 0); // 往previewCtx上绘制
+                console.log(previewCanvas.toDataURL());
+                previewImage.src = previewCanvas.toDataURL();
+              };
+            });
+          };
+        }
+      });
+    </script>
+  </body>
+</html>
