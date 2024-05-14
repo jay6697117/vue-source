@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="app">
+      <div ref="aaa">{{isLoaded}}</div>
+    </div>
+    <!-- 引入Vue.js 2.6.11-->
+    <script src="./vue@2.6.11.js"></script>
+    <script>
+      console.log('---------------1----------------');
+      // 用于存储待执行的回调函数数组
+      const cbs = [];
+
+      // 标记任务队列是否正在执行中
+      let pending = false; //开关
+
+      // 定义执行任务队列的函数
+      function flushCbs() {
+        console.log('flushCallbacks run 2');
+        pending = false; //重置开关
+        // const copies = callbacks.slice(); // 复制(浅拷贝)一份待执行的回调函数数组
+        const copyCbs = [...cbs]; // 复制(浅拷贝)一份待执行的回调函数数组
+        // callbacks.length = 0; // 清空回调函数数组
+        cbs.splice(0, cbs.length); // 清空回调函数数组
+        // for (let i = 0; i < copies.length; i++) {
+        //   copies[i](); // 依次执行回调函数
+        // }
+        copyCbs.forEach(copyCb => {
+          copyCb();
+        });
+      }
+
+      // 定义 nextTick 方法
+      function nextTickFn(cb) {
+        console.log('nextTickFn run 1');
+        cbs.push(cb);
+
+        // pending 为false
+        if (!pending) {
+          pending = true;
+          // 在任务队列中添加一个微任务（Promise 微任务或 MutationObserver 微任务）
+          // 可以确保回调函数在 DOM 更新循环结束之后执行
+          // 这里简化为使用 Promise 微任务
+          Promise.resolve().then(() => {
+            flushCbs();
+          });
+        }
+      }
+
+      console.log('---------------2----------------');
+
+      new Vue({
+        el: '#app',
+        data() {
+          return {
+            isLoaded: false
+          };
+        },
+        mounted() {
+          this.getDom();
+        },
+        methods: {
+          getDom() {
+            this.isLoaded = true;
+            console.warn('this.$refs.aaa.textContent 1:', this.$refs.aaa.textContent);
+            nextTickFn(() => {
+              console.warn('this.$refs.aaa.textContent 2:', this.$refs.aaa.textContent);
+            });
+          }
+        }
+      });
+    </script>
+  </body>
+</html>

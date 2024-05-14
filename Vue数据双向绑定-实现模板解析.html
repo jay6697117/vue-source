@@ -6,8 +6,51 @@
     <title>Vue数据双向绑定-实现模板解析</title>
   </head>
   <body>
+    <div id="app">
+      <input v-model="value" />
+      <p v-text="value"></p>
+    </div>
     <script>
       // 模板解析（实现视图到数据的绑定）
+      // 模板解析
+      function Compile(el, data) {
+        // 关联自定义特性
+        if (el.attributes) {
+          [].forEach.call(el.attributes, attribute => {
+            if (attribute.name.includes('v-')) {
+              Update[attribute.name](el, data, attribute.value);
+            }
+          });
+        }
+
+        // 递归解析所有DOM
+        [].forEach.call(el.childNodes, child => Compile(child, data));
+      }
+
+      // 自定义特性对应的事件
+      const Update = {
+        'v-text'(el, data, key) {
+          // 初始化DOM内容
+          el.innerText = data[key];
+        },
+        'v-model'(input, data, key) {
+          // 初始化Input默认值
+          input.value = data[key];
+
+          // 监听控件的输入事件，并更新数据
+          input.addEventListener('keyup', e => {
+            data[key] = e.target.value;
+          });
+        }
+      };
+
+      // ====
+
+      // 数据
+      const myData = { value: 'hello world.' };
+
+      // 解析
+      Compile(document.querySelector('#app'), myData);
     </script>
   </body>
 </html>
