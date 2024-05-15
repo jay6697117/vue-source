@@ -8,15 +8,21 @@
   <body>
     <div id="app">
       <input v-model="value" />
+      <input v-model="value" />
+      <p v-text="value"></p>
       <p v-text="value"></p>
     </div>
     <script>
       // 模板解析（实现视图到数据的绑定）
       // 模板解析
       function Compile(el, data) {
+        // console.dir(el);
         // 关联自定义特性
         if (el.attributes) {
-          [].forEach.call(el.attributes, attribute => {
+          // console.dir([...el.attributes]);
+          // 扩展符把类数组转成真正的数组
+          [...el.attributes].forEach(attribute => {
+            console.dir(attribute);
             if (attribute.name.includes('v-')) {
               Update[attribute.name](el, data, attribute.value);
             }
@@ -24,7 +30,9 @@
         }
 
         // 递归解析所有DOM
-        [].forEach.call(el.childNodes, child => Compile(child, data));
+        [...el.childNodes].forEach(child => {
+          return Compile(child, data);
+        });
       }
 
       // 自定义特性对应的事件
@@ -43,8 +51,6 @@
           });
         }
       };
-
-      // ====
 
       // 数据
       const myData = { value: 'hello world.' };

@@ -9,8 +9,9 @@
 
     <script>
       // 实现监听器(数据的任何变化，会通知视图更新)
+      // 布订阅模式
       /**
-       * 发布订阅模式
+       * 发布者
        */
       function Subject() {
         // 单个发布者的所有订阅者
@@ -27,7 +28,7 @@
       }
 
       /**
-       * 观察者
+       * 订阅者
        */
       function Observer(queue, key, callback) {
         queue[key].attach(callback);
@@ -67,7 +68,6 @@
       /**
        * 数据拦截器：自动更新 proxy版本
        */
-      //
       function ProxyWatcher(data, queue) {
         return new Proxy(data, {
           get: (target, key) => target[key],
@@ -78,7 +78,6 @@
             queue[key].notify(value);
           }
         });
-        // return data;
       }
 
       // 消息队列

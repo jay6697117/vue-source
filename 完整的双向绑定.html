@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vue完整的数据双向绑定</title>
+  </head>
+  <body>
+    <div id="app">
+      <input v-model="value1" />
+      <div style="padding: 10px 0">
+        value1:
+        <span v-text="value1"></span>
+      </div>
+
+      <hr />
+      <input v-model="value2" />
+      <div style="padding: 10px 0">
+        value2:
+        <span v-text="value2"></span>
+      </div>
+    </div>
+    <script>
+      // 实现监听器(数据的任何变化，会通知视图更新)
+      // 发布订阅模式
+      /**
+       * 发布者
+       */
+      function Subject() {
+        // 单个发布者的所有订阅者
+        this.observers = [];
+        // 添加一个订阅者
+        this.attach = callback => {
+          this.observers.push(callback);
+        };
+
+        // 通过所有的订阅者
+        this.notify = value => {
+          console.log('notify run 666');
+          this.observers.forEach(callback => callback(value));
+        };
+      }
+
+      /**
+       * 订阅者
+       */
+      function Observer(queue, key, callback) {
+        queue[key].attach(callback);
+      }
+
+      /**
+       * 数据拦截器：自动更新 proxy版本
+       */
+      function ProxyWatcher(data, queue) {
+        return new Proxy(data, {
+          get: (target, key) => {
+            // console.log('ProxyWatcher get run');
+            // console.log('----------------1--------------');
+            return target[key];
+          },
+          set: (target, key, value) => {
+            console.log('----------------2--------------');
+            console.log('ProxyWatcher set run');
+            if (value === target[key]) return;
+            target[key] = value;
+            // 通知此值的所有订阅者，数据发生了更新
+            queue[key].notify(value);
+          }
+        });
+      }
+
+      // 模板解析
+      function Compile(el, data) {
+        // 关联自定义特性
+        if (el.attributes) {
+          // console.dir([...el.attributes]);
+          // 扩展符把类数组转成真正的数组
+          [...el.attributes].forEach(attribute => {
+            if (attribute.name.includes('v-')) {
+              Update[attribute.name](el, data, attribute.value);
+            }
+          });
+        }
+
+        // 递归解析所有DOM
+        [...el.childNodes].forEach(child => {
+          return Compile(child, data);
+        });
+      }
+
+      // 自定义特性对应的事件
+      const Update = {
+        'v-text'(el, data, key) {
+          // 初始化DOM内容
+          el.innerText = data[key];
+          // 订阅 value 值的变化: 创建一个数据的订阅，数据变化后更新展示内容
+          Observer(messageQueue, key, value => {
+            console.warn(key, 'v-text updated:', value);
+            console.log('v-text value :>> ', value);
+            el.innerText = value;
+          });
+        },
+        'v-model'(input, data, key) {
+          // 初始化Input默认值
+          input.value = data[key];
+
+          // 监听控件的输入事件，并更新数据
+          input.addEventListener('keyup', e => {
+            data[key] = e.target.value;
+          });
+
+          // 订阅 value 值的变化: 创建一个数据的订阅，数据变化后更新展示内容
+          Observer(messageQueue, key, value => {
+            console.warn(key, 'v-model updated:', value);
+            console.log('v-model value :>> ', value);
+            input.value = value;
+          });
+        }
+      };
+
+      // 消息队列
+      const messageQueue = {};
+      // 数据
+      const constData = { value1: '', value2: '' }; //常量对象
+      // 将每个数据属性添加可订阅的入口(添加到订阅
+      for (const key in constData) {
+        messageQueue[key] = new Subject();
+      }
+      // console.log('constData :>> ', constData);
+      const refData = ProxyWatcher(constData, messageQueue); //常量对象
+
+      // // 将每个数据属性添加可订阅的入口(添加到订阅者的消息队列中)
+      // for (const key in refData) {
+      //   messageQueue[key] = new Subject();
+      // }
+
+      // console.log('refData :>> ', refData);
+      // console.log('messageQueue :>> ', messageQueue);
+      // 解析+关联
+      Compile(document.querySelector('#app'), refData);
+    </script>
+  </body>
+</html>
